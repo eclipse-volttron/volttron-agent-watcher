@@ -41,8 +41,8 @@ import json
 import pytest
 import gevent
 
-from volttron.platform import get_ops, get_examples, jsonapi
-from volttron.platform.messaging.health import STATUS_GOOD
+from volttron.utils import get_ops, get_examples, jsonapi
+from volttron.client.messaging.health import STATUS_GOOD
 
 WATCHER_CONFIG = {
     "watchlist": ["listener"],
