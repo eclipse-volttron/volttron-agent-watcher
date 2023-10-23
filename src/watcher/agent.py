@@ -38,10 +38,10 @@
 
 import logging
 
-from volttron.platform.vip.agent import Agent, Core
-from volttron.platform.agent import utils
-from volttron.platform.messaging.health import Status, STATUS_BAD
-from volttron.platform.scheduling import periodic
+from volttron.client.vip.agent import Agent, Core
+from volttron import utils
+from volttron.client.messaging.health import Status, STATUS_BAD
+from volttron.utils.scheduling import periodic
 
 utils.setup_logging()
 _log = logging.getLogger(__name__)
