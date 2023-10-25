@@ -51,11 +51,11 @@ pyenv global system 3.8.10
     ```shell
     pip install volttron-agent-watcher
     ```
-4. Install agent watcher in VOLTTRON.
+4. Install and start agent watcher in VOLTTRON.
 
     Installing the agent watcher in VOLTTRON requires you to setup a configuration file. Instructions are shown below in the configuration section. 
     ```shell
-    vctl install volttron-agent-watcher --agent-config <path to config> --vip-identity platform.agent_watcher
+    vctl install volttron-agent-watcher --agent-config <path to config> --vip-identity platform.agent_watcher --start --force
     ```
 
 ### Configuration
