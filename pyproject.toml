@@ -9,18 +9,17 @@ eggsecutable = "agent_watcher.agent:main"
 profile = "black"
 
 [tool.poetry]
-include = ["src/watcher", "config"]
-
+include = ["src/agent_watcher", "config"]
 name = "volttron-agent-watcher"
 version = "0.1.0"
-description = ""
+description = "Agent Watcher is used to monitor agents running on a VOLTTRON instance"
 authors = ["VOLTTRON Team <volttron@pnnl.gov>"]
 license = "Apache License 2.0"
 readme = "README.md"
-repository = "https://github.com/eclipse-volttron/volttron-topic-watcher"
-homepage = "https://github.com/eclipse-volttron/volttron-topic-watcher"
+repository = "https://github.com/eclipse-volttron/volttron-agent-watcher"
+homepage = "https://github.com/eclipse-volttron/volttron-agent-watcher"
 keywords = []
-packages = [ { include = "watcher", from = "src" } ]
+packages = [ { include = "agent_watcher", from = "src" } ]
 classifiers = [
     "Programming Language :: Python :: 3 :: Only",
     "Intended Audience :: Science/Research",
