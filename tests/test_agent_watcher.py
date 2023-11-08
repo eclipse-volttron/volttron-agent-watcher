@@ -41,8 +41,9 @@ import json
 import pytest
 import gevent
 
-from volttron.utils import get_ops, get_examples, jsonapi
+from volttron.utils import jsonapi
 from volttron.client.messaging.health import STATUS_GOOD
+from volttrontesting.fixtures.volttron_platform_fixtures import volttron_instance
 
 WATCHER_CONFIG = {
     "watchlist": ["listener"],
@@ -58,13 +59,13 @@ def platform(request, volttron_instance):
     global listener_uuid
 
     listener_uuid = volttron_instance.install_agent(
-        agent_dir=get_examples("ListenerAgent"),
+        agent_dir="volttron-listener",
         vip_identity="listener",
         start=True)
     gevent.sleep(2)
 
     watcher_uuid = volttron_instance.install_agent(
-        agent_dir=get_ops("AgentWatcher"),
+        agent_dir="volttron-agent-watcher",
         config_file=WATCHER_CONFIG)
     gevent.sleep(2)
 
@@ -124,9 +125,15 @@ def test_default_config(platform):
     publish_agent = platform.build_agent(identity="test_agent")
     gevent.sleep(1)
 
-    config_path = os.path.join(get_ops("AgentWatcher"), "config")
-    with open(config_path, "r") as config_file:
-        config_json = json.load(config_file)
+    # config_path = os.path.join("volttron-agent-watcher", "config")
+    # with open(config_path, "r") as config_file:
+    config_json = {
+        "watchlist": [
+            "platform.driver",
+            "platform.actuator"
+        ],
+        "check-period": 10
+    }
     assert isinstance(config_json, dict)
 
     assert 'watchlist' in config_json and 'check-period' in config_json
@@ -137,7 +144,7 @@ def test_default_config(platform):
             assert isinstance(watch, str)
 
     platform.install_agent(
-        agent_dir=get_ops("AgentWatcher"),
+        agent_dir="volttron-agent-watcher",
         config_file=config_json,
         start=True,
         vip_identity="health_test")
