@@ -31,6 +31,7 @@ pyenv global system 3.8.10
 </details>
 
 # Installation
+If VOLTTRON is already installed, proceed to step 3.
 
 1. Create and activate a virtual environment.
 
@@ -38,18 +39,32 @@ pyenv global system 3.8.10
     python -m venv env
     source env/bin/activate
     ```
-2. Install volttron and start the platform.
+2. Install VOLTTRON
 
     ```shell
     pip install volttron
+    ```
 
+3. Start VOLTTRON
+    ```shell
     # Start platform with output going to volttron.log
     volttron -vv -l volttron.log &
     ```
+3. Create your configuration file. In this example it is named `config`
 
-3. Install the agent watcher library.
-    ```shell
-    pip install volttron-agent-watcher
+    The agent has two configuration values:
+
+    * watchlist: a list of VIP identities to watch on the platform instance
+    * check-period: interval in seconds between the agent watcher checking the platform peerlist and publishing alerts
+
+    ```
+    {
+        "watchlist": [
+            "platform.driver",
+            "platform.actuator"
+        ],
+        "check-period": 10
+    }
     ```
 4. Install and start agent watcher in VOLTTRON.
 
@@ -58,22 +73,6 @@ pyenv global system 3.8.10
     vctl install volttron-agent-watcher --agent-config <path to config> --vip-identity platform.agent_watcher --start --force
     ```
 
-### Configuration
-
-The agent has two configuration values:
-
-* watchlist: a list of VIP identities to watch on the platform instance
-* check-period: interval in seconds between the agent watcher checking the platform peerlist and publishing alerts
-
-```
-{
-    "watchlist": [
-        "platform.driver",
-        "platform.actuator"
-    ],
-    "check-period": 10
-}
-```
 
 
 ### Example Publish
