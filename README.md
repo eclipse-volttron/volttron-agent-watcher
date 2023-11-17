@@ -1,7 +1,7 @@
 ## volttron-agent-watcher
 
-The Agent Watcher is used to monitor agents running on a VOLTTRON instance. Specifically it monitors whether a set of 
-VIP identities (peers) are connected to the instance. If any of the peers in the set are not present then an alert will 
+The VOLTTRON Agent Watcher is used to monitor agents running on a VOLTTRON instance. Specifically it monitors whether a set of
+VIP identities (peers) are connected to the instance. If any of the peers in the set are not present then an alert will
 be sent.
 
 # Prerequisites
@@ -68,7 +68,7 @@ If VOLTTRON is already installed, proceed to step 3.
     ```
 4. Install and start agent watcher in VOLTTRON.
 
-    Installing the agent watcher in VOLTTRON requires you to setup a configuration file. Instructions are shown below in the configuration section. 
+    Installing the agent watcher in VOLTTRON requires you to setup a configuration file. Instructions are shown below in the configuration section.
     ```shell
     vctl install volttron-agent-watcher --agent-config <path to config> --vip-identity platform.agent_watcher --start --force
     ```
@@ -81,7 +81,7 @@ The following is an example publish from a platform with an instance of the Plat
 
 ```
 (volttron-agent-watcher-0.1.0 142838) agent_watcher.agent(74) WARNING: Agent(s) expected but but not running ['platform.driver', 'platform.actuator']
-(volttron-listener-0.2.0rc0 139056) listener.agent(104) INFO: Peer: pubsub, Sender: platform.agent_watcher:, Bus: , Topic: alerts/AgentWatcher/None_platform_agent_watcher, Headers: {'alert_key': 'AgentWatcher', 'min_compatible_version': '3.0', 'max_compatible_version': ''}, Message: 
+(volttron-listener-0.2.0rc0 139056) listener.agent(104) INFO: Peer: pubsub, Sender: platform.agent_watcher:, Bus: , Topic: alerts/AgentWatcher/None_platform_agent_watcher, Headers: {'alert_key': 'AgentWatcher', 'min_compatible_version': '3.0', 'max_compatible_version': ''}, Message:
 ('{"status": "BAD", "context": "Agent(s) expected but but not running '
  '[\'platform.driver\', \'platform.actuator\']", "last_updated": '
  '"2023-10-25T18:09:01.663138+00:00"}')
