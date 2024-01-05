@@ -47,14 +47,21 @@ pip install volttron
 # Start platform with output going to volttron.log
 volttron -vv -l volttron.log &
 ```
-3. Create your configuration file. In this example it is named `config`
+3. Create a config directory and navigate to it:
+
+```shell
+mkdir config
+cd config
+```
+
+Navigate to the config directory and create a file called `agentwatcher.config`, use the below JSON to populate your new file.
 
 The agent has two configuration values:
 
 * watchlist: a list of VIP identities to watch on the platform instance
 * check-period: interval in seconds between the agent watcher checking the platform peerlist and publishing alerts
 
-4. In your config add the following JSON. Adjust to fit your needs. 
+4. In your config add the following JSON. Adjust to fit your needs.
 
 ```
 {
@@ -72,10 +79,21 @@ Installing the agent watcher in VOLTTRON requires you to setup a configuration f
 vctl install volttron-agent-watcher --agent-config <path to config> --vip-identity platform.agent_watcher --start --force
 ```
 
-
-
 ### Example Publish
+5. Observe Data
 
+To see data being published to the bus, install a [Listener Agent](https://pypi.org/project/volttron-listener/):
+
+```
+vctl install volttron-listener --start
+```
+
+Once installed, you should see the data being published by viewing the Volttron logs file that was created in step 2.
+To watch the logs, open a separate terminal and run the following command:
+
+```
+tail -f <path to folder containing volttron.log>/volttron.log
+```
 The following is an example publish from a platform with an instance of the Platform Driver installed but not running.
 
 ```
