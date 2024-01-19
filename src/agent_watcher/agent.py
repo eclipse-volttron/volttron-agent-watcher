@@ -24,9 +24,9 @@
 
 import logging
 
-from volttron.client.vip.agent import Agent, Core
 from volttron import utils
-from volttron.client.messaging.health import Status, STATUS_BAD
+from volttron.client.messaging.health import STATUS_BAD, Status
+from volttron.client.vip.agent import Agent, Core
 from volttron.utils.scheduling import periodic
 
 utils.setup_logging()

@@ -22,13 +22,13 @@
 # ===----------------------------------------------------------------------===
 # }}}
 
-import os
 import json
-import pytest
-import gevent
+import os
 
-from volttron.utils import jsonapi
+import gevent
+import pytest
 from volttron.client.messaging.health import STATUS_GOOD
+from volttron.utils import jsonapi
 from volttrontesting.fixtures.volttron_platform_fixtures import volttron_instance
 
 WATCHER_CONFIG = {
