@@ -42,7 +42,7 @@ python -m venv env
 source env/bin/activate
 ```
 
-1. Install volttron and start the platform.
+2. Install volttron and start the platform.
 
 ```shell
 pip install volttron
@@ -51,7 +51,7 @@ pip install volttron
 volttron -vv -l volttron.log &
 ```
 
-1. Create a config directory and navigate to it:
+3. Create a config directory and navigate to it:
 
 ```shell
 mkdir config
@@ -65,7 +65,7 @@ The agent has two configuration values:
 * watchlist: a list of VIP identities to watch on the platform instance
 * check-period: interval in seconds between the agent watcher checking the platform peerlist and publishing alerts
 
-1. In your config add the following JSON. Adjust to fit your needs.
+4. In your config add the following JSON. Adjust to fit your needs.
 
 ```json
 {
@@ -77,7 +77,7 @@ The agent has two configuration values:
 }
 ```
 
-1. Install and start agent watcher in VOLTTRON.
+5. Install and start agent watcher in VOLTTRON.
 
 Installing the agent watcher in VOLTTRON requires you to setup a configuration file. Instructions are shown below in the configuration section.
 
@@ -87,7 +87,7 @@ vctl install volttron-agent-watcher --agent-config <path to config> --vip-identi
 
 ## Example Publish
 
-1. Observe Data
+6. Observe Data
 
 To see data being published to the bus, install a [Listener Agent](https://pypi.org/project/volttron-listener/):
 
@@ -105,7 +105,7 @@ tail -f <path to folder containing volttron.log>/volttron.log
 The following is an example publish from a platform with an instance of the Platform Driver installed but not running.
 
 ```bash
-(volttron-agent-watcher-0.1.0 142838) agent_watcher.agent(74) WARNING: Agent(s) expected but but not running ['platform.driver', 'platform.actuator']
+(volttron-agent-watcher-0.1.0 142838) agent_watcher.agent(74) WARNING: Agent(s) expected but not running ['platform.driver', 'platform.actuator']
 (volttron-listener-0.2.0rc0 139056) listener.agent(104) INFO: Peer: pubsub, Sender: platform.agent_watcher:, Bus: , Topic: alerts/AgentWatcher/None_platform_agent_watcher, Headers: {'alert_key': 'AgentWatcher', 'min_compatible_version': '3.0', 'max_compatible_version': ''}, Message:
 ('{"status": "BAD", "context": "Agent(s) expected but but not running '
 '[\'platform.driver\', \'platform.actuator\']", "last_updated": '
