@@ -4,68 +4,33 @@ The VOLTTRON Agent Watcher is used to monitor agents running on a VOLTTRON insta
 VIP identities (peers) are connected to the instance. If any of the peers in the set are not present then an alert will
 be sent.
 
-## Prerequisites
+## Requires
 
-* Python 3.10
-
-## Python
-
-<details>
-<summary>To install Python 3.10, we recommend using <a href="https://github.com/pyenv/pyenv"><code>pyenv</code></a>.</summary>
-
-```bash
-# install pyenv
-git clone https://github.com/pyenv/pyenv ~/.pyenv
-
-# setup pyenv (you should also put these three lines in .bashrc or similar)
-export PATH="${HOME}/.pyenv/bin:${PATH}"
-export PYENV_ROOT="${HOME}/.pyenv"
-eval "$(pyenv init -)"
-
-# install Python 3.10
-pyenv install 3.10
-
-# make it available globally
-pyenv global system 3.10
-```
-
-</details>
+* python >= 3.10
+* volttron >= 10.0
+* volttron-lib-base-driver
 
 ## Installation
 
-If VOLTTRON is already installed, proceed to step 3.
+Before installing, VOLTTRON should be installed and running.  Its virtual environment should be active.
+Information on how to install of the VOLTTRON platform can be found
+[here](https://github.com/eclipse-volttron/volttron-core).
 
-1. Create and activate a virtual environment.
-
-```shell
-python -m venv env
-source env/bin/activate
-```
-
-2. Install volttron and start the platform.
-
-```shell
-pip install volttron
-
-# Start platform with output going to volttron.log
-volttron -vv -l volttron.log &
-```
-
-3. Create a config directory and navigate to it:
+Create a directory called `config` and use the change directory command to enter it.
 
 ```shell
 mkdir config
 cd config
 ```
 
-Navigate to the config directory and create a file called `agentwatcher.config`, use the below JSON to populate your new file.
+After entering the config directory, create a file called `agentwatcher.config`, use the below JSON to populate your new file.
 
 The agent has two configuration values:
 
 * watchlist: a list of VIP identities to watch on the platform instance
 * check-period: interval in seconds between the agent watcher checking the platform peerlist and publishing alerts
 
-4. In your config add the following JSON. Adjust to fit your needs.
+In your config add the following JSON. Adjust to fit your needs.
 
 ```json
 {
@@ -77,17 +42,15 @@ The agent has two configuration values:
 }
 ```
 
-5. Install and start agent watcher in VOLTTRON.
-
-Installing the agent watcher in VOLTTRON requires you to setup a configuration file. Instructions are shown below in the configuration section.
+Install and start the agent watcher in VOLTTRON.
 
 ```shell
-vctl install volttron-agent-watcher --agent-config <path to config> --vip-identity platform.agent_watcher --start --force
+vctl install volttron-agent-watcher --agent-config agentwatcher.config --vip-identity platform.agent_watcher --start --force
 ```
 
 ## Example Publish
 
-6. Observe Data
+Observe Data
 
 To see data being published to the bus, install a [Listener Agent](https://pypi.org/project/volttron-listener/):
 
