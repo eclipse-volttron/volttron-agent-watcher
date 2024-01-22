@@ -36,6 +36,7 @@ __version__ = '0.1'
 
 
 class AgentWatcher(Agent):
+
     def __init__(self, config_path, **kwargs):
         super(AgentWatcher, self).__init__(**kwargs)
         config = utils.load_config(config_path)

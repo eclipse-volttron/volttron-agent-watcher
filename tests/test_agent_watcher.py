@@ -31,10 +31,7 @@ from volttron.client.messaging.health import STATUS_GOOD
 from volttron.utils import jsonapi
 from volttrontesting.fixtures.volttron_platform_fixtures import volttron_instance
 
-WATCHER_CONFIG = {
-    "watchlist": ["listener"],
-    "check-period": 1
-}
+WATCHER_CONFIG = {"watchlist": ["listener"], "check-period": 1}
 
 alert_messages = {}
 listener_uuid = None
@@ -44,15 +41,13 @@ listener_uuid = None
 def platform(request, volttron_instance):
     global listener_uuid
 
-    listener_uuid = volttron_instance.install_agent(
-        agent_dir="volttron-listener",
-        vip_identity="listener",
-        start=True)
+    listener_uuid = volttron_instance.install_agent(agent_dir="volttron-listener",
+                                                    vip_identity="listener",
+                                                    start=True)
     gevent.sleep(2)
 
-    watcher_uuid = volttron_instance.install_agent(
-        agent_dir="volttron-agent-watcher",
-        config_file=WATCHER_CONFIG)
+    watcher_uuid = volttron_instance.install_agent(agent_dir="volttron-agent-watcher",
+                                                   config_file=WATCHER_CONFIG)
     gevent.sleep(2)
 
     agent = volttron_instance.build_agent()
@@ -67,9 +62,7 @@ def platform(request, volttron_instance):
         except KeyError:
             alert_messages[alert] = 1
 
-    agent.vip.pubsub.subscribe(peer='pubsub',
-                               prefix='alerts',
-                               callback=onmessage)
+    agent.vip.pubsub.subscribe(peer='pubsub', prefix='alerts', callback=onmessage)
 
     def stop():
         volttron_instance.stop_agent(listener_uuid)
