@@ -49,32 +49,17 @@ Install and start the agent watcher in VOLTTRON.
 vctl install volttron-agent-watcher --agent-config agentwatcher.json --vip-identity platform.agent_watcher --start --force
 ```
 
-## Example Publish
+View the status of the installed agent
 
-Observe Data
-
-To see data being published to the bus, install a [Listener Agent](https://pypi.org/project/volttron-listener/):
-
-```bash
-vctl install volttron-listener --start
+```shell
+vctl status
 ```
 
-Once installed, you should see the data being published by viewing the Volttron logs file that was created in step 2.
-To watch the logs, open a separate terminal and run the following command:
+## Development
 
-```bash
-tail -f <path to folder containing volttron.log>/volttron.log
-```
+Please see the following for contributing guidelines [contributing](https://github.com/eclipse-volttron/volttron-core/blob/develop/CONTRIBUTING.md).
 
-The following is an example publish from a platform with an instance of the Platform Driver installed but not running.
-
-```bash
-(volttron-agent-watcher-0.1.0 142838) agent_watcher.agent(74) WARNING: Agent(s) expected but not running ['platform.driver', 'platform.actuator']
-(volttron-listener-0.2.0rc0 139056) listener.agent(104) INFO: Peer: pubsub, Sender: platform.agent_watcher:, Bus: , Topic: alerts/AgentWatcher/None_platform_agent_watcher, Headers: {'alert_key': 'AgentWatcher', 'min_compatible_version': '3.0', 'max_compatible_version': ''}, Message:
-('{"status": "BAD", "context": "Agent(s) expected but but not running '
-'[\'platform.driver\', \'platform.actuator\']", "last_updated": '
-'"2023-10-25T18:09:01.663138+00:00"}')
-```
+Please see the following helpful guide about [developing modular VOLTTRON agents](https://github.com/eclipse-volttron/volttron-core/blob/develop/DEVELOPING_ON_MODULAR.md)
 
 ## Disclaimer Notice
 
