@@ -8,7 +8,6 @@ be sent.
 
 * python >= 3.10
 * volttron >= 10.0
-* volttron-lib-base-driver
 
 ## Installation
 
@@ -23,14 +22,16 @@ mkdir config
 cd config
 ```
 
-After entering the config directory, create a file called `agentwatcher.config`, use the below JSON to populate your new file.
+After entering the config directory, create a file called `agentwatcher.json`, use the below JSON to populate your new file.
 
 The agent has two configuration values:
 
 * watchlist: a list of VIP identities to watch on the platform instance
 * check-period: interval in seconds between the agent watcher checking the platform peerlist and publishing alerts
 
-In your config add the following JSON. Adjust to fit your needs.
+The agent watcher needs other agents to watch. In the below example, we are watching the platform.driver and platform.actuator.
+
+In your config add the following JSON.
 
 ```json
 {
@@ -45,7 +46,7 @@ In your config add the following JSON. Adjust to fit your needs.
 Install and start the agent watcher in VOLTTRON.
 
 ```shell
-vctl install volttron-agent-watcher --agent-config agentwatcher.config --vip-identity platform.agent_watcher --start --force
+vctl install volttron-agent-watcher --agent-config agentwatcher.json --vip-identity platform.agent_watcher --start --force
 ```
 
 ## Example Publish
