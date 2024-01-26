@@ -29,7 +29,7 @@ The agent has two configuration values:
 * watchlist: a list of VIP identities to watch on the platform instance
 * check-period: interval in seconds between the agent watcher checking the platform peerlist and publishing alerts
 
-The agent watcher needs other agents to watch. In the below example, we are watching the platform.driver and platform.actuator.
+The agent watcher requires other agents to watch. In the below example, we are watching the platform.driver and platform.actuator.
 
 In your config add the following JSON.
 
