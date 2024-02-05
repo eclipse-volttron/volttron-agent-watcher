@@ -5,7 +5,7 @@
 #
 # ===----------------------------------------------------------------------===
 #
-# Copyright 2022 Battelle Memorial Institute
+# Copyright 2024 Battelle Memorial Institute
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
 # use this file except in compliance with the License. You may obtain a copy
@@ -41,13 +41,10 @@ listener_uuid = None
 def platform(request, volttron_instance):
     global listener_uuid
 
-    listener_uuid = volttron_instance.install_agent(agent_dir="volttron-listener",
-                                                    vip_identity="listener",
-                                                    start=True)
+    listener_uuid = volttron_instance.install_agent(agent_dir="volttron-listener", vip_identity="listener", start=True)
     gevent.sleep(2)
 
-    watcher_uuid = volttron_instance.install_agent(agent_dir="volttron-agent-watcher",
-                                                   config_file=WATCHER_CONFIG)
+    watcher_uuid = volttron_instance.install_agent(agent_dir="volttron-agent-watcher", config_file=WATCHER_CONFIG)
     gevent.sleep(2)
 
     agent = volttron_instance.build_agent()
