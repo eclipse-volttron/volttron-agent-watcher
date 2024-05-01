@@ -1,0 +1,7 @@
+{
+  "check-period": 10,
+  "watchlist": [
+    "platform.driver",
+    "platform.actuator"
+  ]
+}
