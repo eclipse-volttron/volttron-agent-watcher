@@ -24,12 +24,13 @@
 
 import logging
 
-from volttron import utils
+import volttron.utils as utils
 from volttron.client.messaging.health import STATUS_BAD, Status
 from volttron.client.vip.agent import Agent, Core
+from volttron.client.logs import setup_logging
 from volttron.utils.scheduling import periodic
 
-utils.setup_logging()
+setup_logging()
 _log = logging.getLogger(__name__)
 
 __version__ = '0.1'
