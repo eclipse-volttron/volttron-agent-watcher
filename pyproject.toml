@@ -11,7 +11,7 @@ profile = "black"
 [tool.poetry]
 include = ["src/agent_watcher", "config"]
 name = "volttron-agent-watcher"
-version = "0.2.0"
+version = "2.0.0rc0"
 description = "Agent Watcher is used to monitor agents running on a VOLTTRON instance"
 authors = ["VOLTTRON Team <volttron@pnnl.gov>"]
 license = "Apache License 2.0"
@@ -31,7 +31,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
-volttron-core = {path="../volttron-core", develop=true}
+volttron-core = ">=2.0.0rc0"
 
 [tool.poetry.group.dev.dependencies]
 #volttron-testing = "^0.4.0rc0"
