@@ -7,7 +7,7 @@ be sent.
 ## Requires
 
 * python >= 3.10
-* volttron >= 10.0
+* volttron >= 11.0.0rc0
 
 ## Installation
 
