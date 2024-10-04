@@ -4,19 +4,14 @@ The VOLTTRON Agent Watcher is used to monitor agents running on a VOLTTRON insta
 VIP identities (peers) are connected to the instance. If any of the peers in the set are not present then an alert will
 be sent.
 
-## Requires
+## Pre-requisite
 
-- Python = 3.10
-- pip >= 24.0
-- poetry >= 1.8.2
-- python >= 3.10
-- volttron >= 11.0.0rc0
-
-## Installation
-
-Before installing, VOLTTRON should be installed and running.  Its virtual environment should be active.
+Before installing this agent, VOLTTRON (>=11.0.0rc0) should be installed and running.  Its virtual environment should be active.
 Information on how to install of the VOLTTRON platform can be found
 [here](https://github.com/eclipse-volttron/volttron-core).
+
+
+## Installation
 
 Create a directory called `config` and use the change directory command to enter it.
 
