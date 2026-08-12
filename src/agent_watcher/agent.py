@@ -29,7 +29,7 @@ from volttron.client.messaging.health import STATUS_BAD, Status
 from volttron.client.vip.agent import Agent, Core
 from volttron.utils.scheduling import periodic
 
-utils.setup_logging()
+
 _log = logging.getLogger(__name__)
 
 __version__ = '0.1'
@@ -40,16 +40,40 @@ class AgentWatcher(Agent):
     def __init__(self, config_path, **kwargs):
         super(AgentWatcher, self).__init__(**kwargs)
         config = utils.load_config(config_path)
-        self.watchlist = config["watchlist"]
-        self.check_period = config.get("check-period", 10)
+        self.watchlist = []
+        self.check_period = 10
+        self.schedule_event = None
+        self.vip.config.subscribe(self._config_add, actions="NEW", pattern="config")
+        self.vip.config.subscribe(self._config_del, actions="DELETE", pattern="config")
+        self.vip.config.subscribe(self._config_mod, actions="UPDATE", pattern="config")
 
-    @Core.receiver('onstart')
-    def onstart(self, sender, **kwargs):
-        self.core.schedule(periodic(self.check_period), self.watch_agents)
+    # @Core.receiver('onstart')
+    # def onstart(self, sender, **kwargs):
+    #     self.core.schedule(periodic(self.check_period), self.watch_agents)
+
+    def _config_add(self, config_name, action, contents):
+        self.watchlist = contents.get("watchlist", [])
+        self.check_period = contents.get("check-period", 10)
+        self.schedule_event =self.core.schedule(periodic(self.check_period), self.watch_agents)
+
+    def _config_del(self, config_name, action, contents):
+        self.watchlist = []
+        self.check_period = 10
+        if self.schedule_event:
+            self.schedule_event.cancel()
+            self.schedule_event = None
+
+    def _config_mod(self, config_name, action, contents):
+        self.watchlist = contents.get("watchlist", [])
+        self.check_period = contents.get("check-period", 10)
+        if self.schedule_event:
+            self.schedule_event.cancel()
+            self.schedule_event = None
+        self.schedule_event =self.core.schedule(periodic(self.check_period), self.watch_agents)
 
     def watch_agents(self):
         peerlist = self.vip.peerlist().get()
-
+        _log.info("Peerlist: {}".format(peerlist))
         missing_agents = []
         for vip_id in self.watchlist:
             if vip_id not in peerlist:
