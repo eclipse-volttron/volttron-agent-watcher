@@ -22,73 +22,60 @@
 # ===----------------------------------------------------------------------===
 # }}}
 
-import json
-import os
-
-import gevent
+from unittest.mock import MagicMock
 import pytest
-from volttron.client.messaging.health import STATUS_GOOD
-from volttron.utils import jsonapi
-from volttrontesting.fixtures.volttron_platform_fixtures import volttron_instance
-
-WATCHER_CONFIG = {"watchlist": ["listener"], "check-period": 1}
-
-alert_messages = {}
-listener_uuid = None
+from agent_watcher.agent import AgentWatcher
 
 
-@pytest.fixture(scope='module')
-def platform(request, volttron_instance):
-    global listener_uuid
+def test_agent_watcher_lifecycle_and_config_store():
+    """Test full agent watcher lifecycle with config store NEW, UPDATE, DELETE actions."""
+    agent = object.__new__(AgentWatcher)
+    agent.watchlist = []
+    agent.check_period = 10
+    agent.schedule_event = None
+    agent.vip = MagicMock()
+    agent.core = MagicMock()
 
-    listener_uuid = volttron_instance.install_agent(agent_dir="volttron-listener", vip_identity="listener", start=True)
-    gevent.sleep(2)
+    alerts_sent = []
 
-    watcher_uuid = volttron_instance.install_agent(agent_dir="volttron-agent-watcher", config_file=WATCHER_CONFIG)
-    gevent.sleep(2)
+    def mock_send_alert(key, status):
+        alerts_sent.append((key, status))
 
-    agent = volttron_instance.build_agent()
+    agent.vip.health.send_alert.side_effect = mock_send_alert
 
-    def onmessage(peer, sender, bus, topic, headers, message):
-        global alert_messages
+    # 1. Simulate NEW config action from config store
+    initial_config = {"watchlist": ["listener", "actuator"], "check-period": 5}
+    agent._config_add("config", "NEW", initial_config)
+    assert agent.watchlist == ["listener", "actuator"]
+    assert agent.check_period == 5
+    assert agent.schedule_event is not None
 
-        alert = jsonapi.loads(message)["context"]
+    # 2. Simulate watch_agents execution when both agents are running
+    mock_peerlist = MagicMock()
+    mock_peerlist.get.return_value = ["listener", "actuator", "platform.control"]
+    agent.vip.peerlist.return_value = mock_peerlist
 
-        try:
-            alert_messages[alert] += 1
-        except KeyError:
-            alert_messages[alert] = 1
+    agent.watch_agents()
+    assert len(alerts_sent) == 0
 
-    agent.vip.pubsub.subscribe(peer='pubsub', prefix='alerts', callback=onmessage)
+    # 3. Simulate watch_agents when 'actuator' goes missing
+    mock_peerlist.get.return_value = ["listener", "platform.control"]
+    agent.watch_agents()
+    assert len(alerts_sent) == 1
+    assert "actuator" in alerts_sent[0][1].context
 
-    def stop():
-        volttron_instance.stop_agent(listener_uuid)
-        volttron_instance.stop_agent(watcher_uuid)
+    # 4. Simulate UPDATE config action with a single watched agent
+    updated_config = {"watchlist": ["listener"], "check-period": 2}
+    agent._config_mod("config", "UPDATE", updated_config)
+    assert agent.watchlist == ["listener"]
+    assert agent.check_period == 2
 
-        volttron_instance.remove_agent(listener_uuid)
-        volttron_instance.remove_agent(watcher_uuid)
+    # Verify watch_agents with updated watchlist (listener is present)
+    alerts_sent.clear()
+    agent.watch_agents()
+    assert len(alerts_sent) == 0
 
-        agent.core.stop()
-        alert_messages.clear()
-
-    request.addfinalizer(stop)
-    return volttron_instance
-
-
-def test_agent_watcher(platform):
-    global alert_messages
-    global listener_uuid
-
-    gevent.sleep(2)
-    assert not alert_messages
-
-    platform.stop_agent(listener_uuid)
-    gevent.sleep(2)
-    assert alert_messages
-    assert "Agent(s) expected but but not running ['listener']" in alert_messages
-
-    platform.start_agent(listener_uuid)
-    alert_messages.clear()
-    gevent.sleep(2)
-
-    assert not alert_messages
+    # 5. Simulate DELETE config action
+    agent._config_del("config", "DELETE", {})
+    assert agent.watchlist == []
+    assert agent.schedule_event is None
