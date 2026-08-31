@@ -43,18 +43,18 @@ class AgentWatcher(Agent):
         self.watchlist = []
         self.check_period = 10
         self.schedule_event = None
+        self.vip.config.set_default("config", config)
         self.vip.config.subscribe(self._config_add, actions="NEW", pattern="config")
         self.vip.config.subscribe(self._config_del, actions="DELETE", pattern="config")
         self.vip.config.subscribe(self._config_mod, actions="UPDATE", pattern="config")
 
-    # @Core.receiver('onstart')
-    # def onstart(self, sender, **kwargs):
-    #     self.core.schedule(periodic(self.check_period), self.watch_agents)
-
     def _config_add(self, config_name, action, contents):
         self.watchlist = contents.get("watchlist", [])
         self.check_period = contents.get("check-period", 10)
-        self.schedule_event =self.core.schedule(periodic(self.check_period), self.watch_agents)
+        if self.schedule_event:
+            self.schedule_event.cancel()
+            self.schedule_event = None
+        self.schedule_event = self.core.schedule(periodic(self.check_period), self.watch_agents)
 
     def _config_del(self, config_name, action, contents):
         self.watchlist = []
